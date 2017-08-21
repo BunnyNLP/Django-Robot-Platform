@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>机器人后台管理系统</title>
+    <script src="{%static '/js/jquery-3.1.0.min.js'%}"></script>
+    <script src="{%static 'js/bootstrap.min.js'%}"></script>
+    <script src="{%static '/js/echarts.min.js'%}"></script>
+    <link href="{%static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{%static '/css/style.css'%}" rel="stylesheet">
+        <!--引用百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+    <style>
+        body{
+            background-color: #F2F2F2;
+        }
+
+    .navbar-static-top {
+        box-shadow: 1px 1px 1px #03103C;
+        background: #2E64BA;
+        background: -moz-linear-gradient(top, #4C9BEF 0%, #2E64BA 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4A515B), color-stop(100%,#2E64BA));
+        background: -webkit-linear-gradient(top, #4C9BEF 0%,#2E64BA 100%);
+        background: -o-linear-gradient(top, #4C9BEF 0%,#2E64BA 100%);
+        background: -ms-linear-gradient(top, #4C9BEF 0%,#2E64BA 100%);
+        background: linear-gradient(top, #4C9BEF 0%,#2E64BA 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4A515B', endColorstr='#3C4049');
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#4A515B', endColorstr='#3C4049')";
+    }
+
+    .navbar-brand {
+        display: inline-block;
+        padding:10px 0 0 35px;
+        color: #fff;
+        font-size:25px;
+    }
+    </style>
+</head>
+
+
+
+<body style="min-width:1200px;height:300px;margin:0;padding:0;">
+<div class="navbar navbar-duomi navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+             <p class="navbar-brand" id="logo">机器人后台管理系统
+             </p>
+        </div >
+        <div align="right" ><a  href="logout"><font size="5" color="White">退出登陆</font></a></div>
+
+    </div>
+</div>
+
+<div class="container-fluid" >
+    <div class="row">
+        <div class="col-md-2">
+            <ul id="main-nav" class="nav nav-tabs nav-stacked" style="">
+                <li >
+                    <a href="index" >
+                        超声波测距传感器
+                    </a>
+                </li>
+                <li>
+                    <a href="temperatures" >
+                        温度传感器      
+                    </a>
+                </li>
+                <li>
+                    <a href="humidities" >
+                        湿度传感器      
+                    </a>
+                </li>
+                <li>
+                    <a href="gps" >
+                        GPS传感器      
+                    </a>
+                </li>
+                <li>
+                    <a href="video" >
+                        摄像头
+                    </a>
+                </li>
+                <li>
+                    <a href="smog" >
+                        烟雾浓度传感器
+                    </a>
+                </li> 
+            </ul>
+        </div>
+        <div class="col-md-10">
+        	{%block right %}{%endblock%}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

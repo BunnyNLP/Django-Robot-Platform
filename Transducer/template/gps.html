@@ -1,0 +1,70 @@
+{%extends "ifream.html"%}
+{%load static%}
+{%block right%}
+
+
+<div class="container containerGps">
+    <strong>GPS定位</strong>
+    <hr>
+    <div style="width:650px;height:500px;border:#ccc solid 1px; float:left" id="dituContent"></div>
+    <div>
+        <img src={%static '/images/direction.png'%} style="width:200px;height:250px;margin-left:50px;margin-bottom: 50px;">
+        <p style="font-weight: bold;">当前位置：</p>
+        经度：<span id="longitude"></span><br>
+        纬度：<span id="latitude"></span><br>
+        <span style="color:#ccc">(点击可获取该地位置的经纬度)</span>
+        <p id="mouclick" ></p>
+    </div>
+</div>
+<!--百度地图容器-->
+
+</body>
+
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+    }
+
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var x =110.925335;
+        var y =21.646945;
+        $('#longitude').html(x);
+        $('#latitude').html(y);
+        var point = new BMap.Point(x,y);//定义一个中心点坐标
+        map.centerAndZoom(point,13);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+        map.addEventListener("click",function(e){
+            $("#mouclick").html("该地位置："+e.point.lng + " , " + e.point.lat)
+//            alert(e.point.lng + "," + e.point.lat);
+        });
+    }
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl(){
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+        map.addControl(ctrl_sca);
+    }
+
+
+    initMap();//创建和初始化地图
+</script>
+{% endblock %}

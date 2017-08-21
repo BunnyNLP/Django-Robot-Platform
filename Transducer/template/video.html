@@ -1,0 +1,32 @@
+{%extends "ifream.html"%}
+{%load static%}
+{%block right%}
+<div class="container">
+    <strong>机器人直播视频</strong>
+    <hr>
+    <img src={%static '/images/robot.jpg'%} style="float:left;width:100px;margin:40px 0 0 30px;">
+    <video controls=controls id="video" autoplay><!-- autoplay-->
+                <source src={%static '/video/1.MySQL数据库安装及基本配置.webm'%}> </source>        <!--支持ogg/mp4/webm-->
+    </video>
+
+    <button type="button" class="btn col-sm-2 rotate">向左旋转90°</button><br>
+    <button type="button" class="btn col-sm-2 rotate">向右旋转90</button><br>
+
+
+
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $("#jyfc_content").fsrPMD({
+            Event: 'mouseover',        //事件
+            Id: 'jyfc_content',     //容器ID
+            Bq: 'li',               //复制html标签
+            Fx: "left",             //方向
+            Time: 40
+        });
+    });
+</script>
+{%endblock%}

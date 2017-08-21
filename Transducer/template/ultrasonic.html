@@ -1,0 +1,118 @@
+{%extends "ifream.html"%}
+{% block right%}
+<strong>超声波测距传感器</strong>
+<div class="detail">
+        HY-SRF05 超声波测距模块可提供2cm-450cm 的非接触式距离感测功能， 测距精度可达高到3mm；模块包括超声波发射器、接收器与控制电路。<br>
+        基本工作原理：<br>
+        (1)采用IO 口TRIG 触发测距，给至少10us 的高电平信号; <br>
+        (2)模块自动发送8 个40khz 的方波，自动检测是否有信号返回；<br>
+        (3)有信号返回，通过IO 口ECHO 输出一个高电平，高电平持续的时间就是超声 波从发射到返回的时间。<br>
+       
+        <p>{{arr1}}</p>
+        <span style="color:orangered;">测试距离=(高电平时间*声速(340M/S))/2;</span>
+	  <p id="apple"></p>
+    </div>
+    <div id="ultChart" style="">
+    </div>
+</div>
+<script type="text/javascript">
+    setInterval(function () {
+            var arr0 = [];
+            $.ajax({
+                type: "GET",
+                url: "http://10.10.200.120:8000/infrared/?format=json",
+                dataType: "json",
+                contentType: "application/json;",
+                data: {},
+                success: function (data) {
+                 for (var i = 0; i < data.length; i++) {
+                        arr0.push(data[i].distance);
+                    }
+                    myChart = echarts.init(document.getElementById('ultChart'));
+                    option = {
+                        title: {
+                            text: '超声波测距离',
+                        },
+                        tooltip: { //提示框
+                            trigger: 'item',    //坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用。
+                            axisPointer: {      //鼠标悬浮到图上，可以出现标线和刻度文本。
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#283b56'
+                                }
+                            }
+                        },
+                        legend: {
+                            data: ['距离']
+                        },
+                        toolbox: {       //工具栏。内置有导出图片，数据视图，动态类型切换，数据区域缩放，重置五个工具。
+                            show: true,
+                            feature: {    //各工具配置项。除了各个内置的工具按钮外，还可以自定义工具按钮。注意，自定义的工具名字，只能以 my 开头，例如下例中的 myTool1，myTool2
+                                dataView: {readOnly: false},   //数据视图工具，可以展现当前图表所用的数据，编辑后可以动态更新。
+                                restore: {},  //配置项还原。
+                                saveAsImage: {}  //保存为图片。
+                            }
+                        },
+                        dataZoom: {  //dataZoom 组件 用于区域缩放，从而能自由关注细节的数据信息，或者概览数据整体，或者去除离群点的影响。
+                            show: false,
+                            start: 0,
+                            end: 100
+                        },
+                        xAxis: {
+                            type: 'category',   // 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+                            boundaryGap: true,  //坐标轴两边留白策略，类目轴和非类目轴的设置和表现不一样。
+                            data: (function () {
+                                var now = new Date();
+                                var res = [];
+                                var len = 15;
+                                while (len--) {
+                                    res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+                                    now = new Date(now - 2000);
+                                }
+                                return res;
+                            })()
+                        },
+                        yAxis: [
+                            {
+                                type: 'value',
+                                scale: true,   //刻度，只在数值轴中（type: 'value'）有效。
+                                name: '距离',
+                                max: 50,
+                                min: 0,
+                            }
+                        ],
+                        series: [    //系列列表。每个系列通过 type 决定自己的图表类型
+                            {
+                                name: '距离',
+                                type: 'bar',
+                                data: (function () {
+                                    var res = [];
+                                    var len = 0;
+                                    while (len < 15) {
+                                        for (var i = 16; i > 0; i--) {
+                                            res.push(arr0[arr0.length - i]);
+                                        }
+                                        len++;
+                                    }
+                                    return res;
+                                })()
+                            }
+                        ]
+                    };
+                    option.series[0].data.shift();
+                    option.series[0].data.push(arr0[arr0.length-1]);
+                    axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '');
+                    option.xAxis.data.shift();
+                    option.xAxis.data.push(axisData);
+                    myChart.hideLoading();
+                    myChart.setOption(option);
+                }
+            })
+
+    }, 3000)
+
+
+</script>
+
+
+{%endblock%}

@@ -1,0 +1,84 @@
+{%extends "ifream.html"%}
+{% block right %}
+<div class="container">
+    <strong>湿度传感器</strong>
+    <div  id="crosshum"></div>
+    <div class="hum_box">
+        <div  id="humChart"></div>
+    </div>
+    <table class="table table-striped table-bordered  table-hover">
+        <thead>
+        <tr>
+            <th>空气相对湿度</th>
+            <th>影响</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>45-65%RH</td>
+            <td>环境中最感舒适，也不容易引发呼吸系统的疾病。</td>
+        </tr>
+        <tr>
+            <td style="padding-top:50px;">低于40%RH</td>
+            <td>人鼻部和肺部呼吸道黏膜上的纤毛运动减缓，灰尘、细菌等容易附着在黏膜上，刺激喉部引发口渴、干咳、声哑、喉痛等症状，也使流感病毒和能引发感染的革兰氏阳性菌的繁殖速度加快，也容易随着空气中的灰尘扩散，引发其他疾病。</td>
+        </tr>
+        <tr>
+            <td style="padding-top:50px;">大于65%RH</td>
+            <td>人体中的松果激素量也较大，使得体内甲状腺素及肾上腺素的浓度相对降低，人就会感到无精打采，萎靡不振。长时间在湿度较大的地方工作、生活，还容易患风湿性、类风湿性关节炎等湿痹症，最终导致人体的免疫力下降。</td>
+        </tr>
+        <tr>
+            <td colspan="2">当空气湿度高于65%或低于38%时，微生物繁殖滋生最快。</td>
+        </tr>
+        <tr>
+            <td colspan="2">当相对湿度在45%～55%时，病菌的死亡率较高。</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script type="text/javascript">
+    setInterval(function () {
+        var arr0 = [];
+        $.ajax({
+            type: "GET",
+            url: "http://10.10.200.120:8000/humidity/?format=json",
+            dataType: "json",
+            contentType: "application/json;",
+            data: {},
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    arr0.push(data[i].humidity);
+                }
+                myChart = echarts.init(document.getElementById('humChart'));
+                option = {
+                    tooltip : {
+                        formatter: "{a} <br/>{b} : {c}%"
+                    },
+                    toolbox: {
+                        feature: {
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    series: [
+                        {
+                            name: '空气湿度',
+                            type: 'gauge',
+                            detail: {formatter:'{value}%'},
+                            data: [{value: 50, name: '空气湿度'}]
+                        }
+                    ]
+                };
+
+                option.series[0].data[0].value = arr0[arr0.length-1];
+                myChart.setOption(option);
+            }
+        })
+
+    }, 3000)
+
+
+
+
+</script>
+{%endblock%}

@@ -1,0 +1,45 @@
+{%load static%}
+<!DOCTYPE HTML>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+<script src="{%static '/js/jquery-3.1.0.min.js'%}"></script>
+<script type="text/javascript">
+    $(function(){
+        //按钮单击时执行
+        var distance;
+        var time;
+        $("#testAjax").click(function(){
+              //Ajax调用处理
+            $.ajax({
+               type: "GET",
+               url: "http://10.10.200.127:8000/infrared/?format=json",
+               data: {},
+               contentType: "application/json;",
+               success: function(data){
+		   for (var i = 0; i < data.length; i++) {
+				 console.log(data[i].distance);
+				       
+			}
+                        alert("succeed");
+				var data =data;
+				$("#apple").html(data)
+                  },
+                  error:function(){
+                    alert("请求失败")
+                  }
+            });
+
+         });
+    });
+
+</script>    
+ 
+</head>
+    <body>
+        <div id="myDiv"><h2>AJAX请求</h2></div>
+        <button id="testAjax" type="button">Ajax</button>
+        <div id="showjson"></div>
+<p id="apple"></p>
+    </body>
+</html>
